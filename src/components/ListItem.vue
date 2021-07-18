@@ -1,27 +1,23 @@
 <template>
   <div>
-    <!-- <p v-for="job in this.$store.state.jobs" :key="job.id">
-      <a :href="job.url">{{ job.title }}</a>
-      <small>{{ job.time_ago }} by {{ job.domain }}</small>
-    </p> -->
-    <ul class="job-list">
-      <li v-for="job in this.$store.state.jobs" :key="job.id" class="post">
+    <ul class="news-list">
+      <li v-for="item in this.$store.state.news" :key="item.id" class="post">
         <!-- point section -->
         <div class="points">
-          {{ job.points || 0 }}
+          {{ item.points }}
         </div>
         <!-- etc infomation -->
         <div>
-          <p class="ask-title">
-            <a href="job.url">
-            {{ job.title }}
+          <p class="news-title">
+            <a href="item.url">
+            {{ item.title }}
             </a>
           </p>
           <small class="link-text">
-            {{ job.time_ago }} by
-              <a :href="job.url">
-                {{ job.domain }}
-              </a>
+            {{ item.time_ago }} by
+            <router-link :to="`/user/${item.user}`" class="link-text">
+            {{ item.user }}
+            </router-link>
           </small>
         </div>
       </li>
@@ -30,16 +26,18 @@
 </template>
 
 <script>
+// import { fetcheNewsList } from '../api/index.js';
 
 export default {
   created() {
-    this.$store.dispatch('FETCH_JOBS');
-  }
-}
+    // this.$store.dispatch("FETCH_NEWS");
+    console.log(this.$route);
+  },
+};
 </script>
 
 <style scoped>
-.job-list {
+  .news-list {
     margin: 0;
     padding: 0;
   }
@@ -57,7 +55,7 @@ export default {
     justify-content: center;
     color: #42b883;
   }
-  .job-title {
+  .news-title {
     margin: 0;
   }
   .link-text {
