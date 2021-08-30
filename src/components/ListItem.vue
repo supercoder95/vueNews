@@ -1,23 +1,36 @@
 <template>
   <div>
     <ul class="news-list">
-      <li v-for="item in this.$store.state.news" :key="item.id" class="post">
+      <li v-for="item in listItems" :key="item.id" class="post">
         <!-- point section -->
         <div class="points">
-          {{ item.points }}
+          {{ item.points || 0 }}
         </div>
         <!-- etc infomation -->
         <div>
+          <!-- title section -->
           <p class="news-title">
-            <a href="item.url">
-            {{ item.title }}
-            </a>
+            <template v-if="item.domain">
+              <a v-bind:href="item.url">
+              {{ item.title }}
+              </a>
+            </template>
+            <template v-else>
+              <router-link :to="`item/${item.id}`">
+                {{ item.title }}
+              </router-link>
+            </template>
           </p>
           <small class="link-text">
             {{ item.time_ago }} by
-            <router-link :to="`/user/${item.user}`" class="link-text">
+            <router-link 
+            v-if="item.user"
+            :to="`/user/${item.user}`" class="link-text">
             {{ item.user }}
             </router-link>
+            <a :href="item.url" v-else>
+              {{ item.domain }}
+            </a>
           </small>
         </div>
       </li>
@@ -26,14 +39,14 @@
 </template>
 
 <script>
-// import { fetcheNewsList } from '../api/index.js';
 
 export default {
-  created() {
-    // this.$store.dispatch("FETCH_NEWS");
-    console.log(this.$route);
-  },
-};
+  computed: {
+    listItems() {
+      return this.$store.state.list;
+    }
+  }
+}
 </script>
 
 <style scoped>
